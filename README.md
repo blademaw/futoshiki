@@ -7,7 +7,7 @@ Futoshiki puzzles are a Japanese puzzle game where the puzzle grids are Latin sq
 
 <img src="img/5x5.png" alt="A 5x5 Futoshiki puzzle" style="zoom:25%;" />
 
-has the constraint that row one, column one ($R1C1$) is strictly less than the adjacent cell to the right; i.e., $R1C1 < R1C2 \equiv R1C1 < 3 \rArr R1C1 \in \{1, 2\}$. The puzzles can therefore be framed as finite domain constraint problems, making them perfect candidates for Prolog and the CLP(FD) library.
+has the constraint that row one, column one ($R1C1$) is strictly less than the adjacent cell to the right; i.e., $R1C1 < R1C2 \equiv R1C1 < 3 \Rightarrow R1C1 \in \{1, 2\}$. The puzzles can therefore be framed as finite domain constraint problems, making them perfect candidates for Prolog and the CLP(FD) library.
 
 ## Usage
 
