@@ -1,5 +1,8 @@
 # futoshiki-pl-solver
-A solver for Futoshiki inequality puzzles.
+
+[TOC]
+
+A small solver for Futoshiki inequality puzzles.
 
 ## Futoshiki puzzles
 
@@ -7,7 +10,7 @@ Futoshiki puzzles are a Japanese puzzle game where the puzzle grids are Latin sq
 
 <img src="img/5x5.png" alt="A 5x5 Futoshiki puzzle" style="zoom:25%;" />
 
-has the constraint that row one, column one ($R1C1$) is strictly less than the adjacent cell to the right; i.e., $R1C1 < R1C2 \equiv R1C1 < 3 \Rightarrow R1C1 \in \{1, 2\}$. The puzzles can therefore be framed as finite domain constraint problems, making them perfect candidates for Prolog and the CLP(FD) library.
+has the constraint that row one, column one ($R1C1$) is strictly less than the adjacent cell to the right; i.e., $R1C1 < R1C2 \equiv R1C1 < 3 \Rightarrow R1C1 \in \{1, 2\}$. The puzzles can therefore be framed as finite domain constraint problems, making them perfect candidates for Prolog and the _CLP(FD)_ library.
 
 ## Usage
 
@@ -32,7 +35,28 @@ solve_futoshiki(Grid, Constraints),
 write(Grid).
 ```
 
-Which produces the output
+Which can be written more succinctly with the inequality shorthand:
+
+```prolog
+?- Grid = [
+ [_, 3, _, _, _],
+ [_, _, _, _, _],
+ [_, _, _, _, _],
+ [_, _, _, _, _],
+ [_, _, _, _, _]
+],
+Constraints = [
+ (1,1)<(1,2),
+ (2,3)<(2,4)>(1,4),
+ (3,1)>(3,2)>(3,3), (3,4)<(3,5)>(4,5)>(5,5),
+ (4,1)>(4,2)>(5,2),
+ (4,4)<(5,4)
+],
+solve_futoshiki(Grid, Constraints),
+write(Grid).
+```
+
+Which produces:
 
 ```
 [
@@ -52,10 +76,10 @@ maplist(same_length(Grid), Grid), % 5x5 puzzle
 nth1_matrix(1, 2, Grid, 3),
 Constraints = [
  (1,1)<(1,2),
- (2,4)>(2,3), (2,4)>(1,4),
- (3,1)>(3,2), (3,2)>(3,3), (3,5)>(3,4), (3,5)>(4,5), (4,5)>(5,5),
- (4,1)>(4,2), (4,2)>(5,2),
- (5,4)>(4,4)
+ (2,3)<(2,4)>(1,4),
+ (3,1)>(3,2)>(3,3), (3,4)<(3,5)>(4,5)>(5,5),
+ (4,1)>(4,2)>(5,2),
+ (4,4)<(5,4)
 ],
 solve_futoshiki(Grid, Constraints),
 write(Grid).
@@ -78,17 +102,17 @@ The solver uses the CLP(FD) library, which employs constraint propagation to yie
  [_, _, _, _, _, _, _, _, _]
 ],
 Constraints = [
- (1,4)>(2,4), (2,4)>(2,3),
- (1,9)>(2,9), (2,9)>(2,8),
- (2,5)<(2,6), (2,6)>(3,6), (3,6)>(3,7), (3,7)<(4,7),
+ (1,4)>(2,4)>(2,3),
+ (1,9)>(2,9)>(2,8),
+ (2,5)<(2,6)>(3,6)>(3,7)<(4,7),
  (3,8)>(3,9),
  (4,2)>(4,3),
- (4,5)>(4,4), (4,4)<(5,4), (5,4)<(5,3), (5,3)>(6,3),
- (5,1)>(6,1), (6,1)>(7,1),
- (6,8)<(5,8), (5,8)>(5,9), (5,9)>(6,9),
- (6,2)>(7,2), (7,2)>(7,3), (7,2)>(8,2), (8,2)>(8,3),
- (7,5)<(7,6), (7,6)>(8,6), (8,6)>(9,6),
- (7,7)<(7,8), (7,8)<(8,8), (8,8)<(8,7), (8,7)<(9,7), (8,8)>(8,9),
+ (4,5)>(4,4)<(5,4)<(5,3)>(6,3),
+ (5,1)>(6,1)>(7,1),
+ (6,8)<(5,8)>(5,9)>(6,9),
+ (6,2)>(7,2)>(7,3), (7,2)>(8,2)>(8,3),
+ (7,5)<(7,6)>(8,6)>(9,6),
+ (7,7)<(7,8)<(8,8)<(8,7)<(9,7), (8,8)>(8,9),
  (9,8)<(9,9)
 ],
 solve_futoshiki(Grid, Constraints),
